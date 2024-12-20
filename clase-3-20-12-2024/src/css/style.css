@@ -1,0 +1,31 @@
+body {
+  background-color: #ccc;
+  min-height: 100vh;
+}
+
+.cont-app {
+  width: 60%;
+  margin: auto;
+  border-radius: 20px;
+  box-shadow: -1px -1px 14px -1px rgba(138, 138, 138, 0.75);
+  background-color: white;
+}
+
+.icon-record-botton {
+  font-size: 30px;
+}
+
+@media (max-width: 480px) {
+  .cont-app {
+    width: 90%;
+  }
+}
+
+li i {
+  font-size: 20px;
+}
+
+li:hover {
+  cursor: pointer;
+  background-color: #f1f1f1;
+}

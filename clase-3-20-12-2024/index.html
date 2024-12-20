@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo App Voice</title>
+  <link rel="shortcut icon" href="./assets/img/icon.png" type="image/png">
+  <!-- CSS -->
+  <link rel="stylesheet" href="./src/css/style.css">
+  <!-- Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Bulma -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+</head>
+
+<body class="p-5">
+  <div class="cont-app p-5">
+    <!-- Título -->
+    <h1 class="title has-text-centered">Todo App Voice | UTN</h1>
+    <h2 class="subtitle has-text-centered has-text-grey-light is-6 mt-3 is-italic">Categorías: urgente, medio, tranqui
+    </h2>
+    <!-- Botón -->
+    <button id="record-botton" class="button is-link is-fullwidth"><i
+        class='bx bx-microphone icon-record-botton'></i></button>
+
+    <div id="filters" class="box mt-3">
+      <!-- Filtro de Orden -->
+      <div class="columns">
+        <div class="column field">
+          <label class="label">Ordenar por fecha</label>
+          <div class="control">
+            <div class="select">
+              <select id="filter-date">
+                <option value="newest" selected>Más reciente</option>
+                <option value="oldest">Más antigua</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtro por Prioridad -->
+        <div class="column field">
+          <label class="label">Filtrar por prioridad</label>
+          <div class="control">
+            <div class="select">
+              <select id="filter-priority">
+                <option value="" selected>Seleccionar prioridad</option>
+                <option value="urgente">Urgente</option>
+                <option value="moderada">Moderada</option>
+                <option value="tranqui">Tranqui</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtro por Estado (Realizada o No) -->
+        <div class="column field">
+          <label class="label">Estado de la tarea</label>
+          <div class="control">
+            <div class="select">
+              <select id="filter-status">
+                <option value="" selected>Seleccionar estado</option>
+                <option value="done">Realizada</option>
+                <option value="pending">Pendiente</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón Limpiar filtros -->
+      <div class="mt-4">
+        <button class="button is-fullwidth is-light">Limpiar filtros</button>
+      </div>
+    </div>
+
+    <!-- Lista de tareas -->
+    <ul id="list-tasks">
+      <!-- LISTA DE TAREAS DINAMICAS -->
+    </ul>
+  </div>
+
+  <script src="./src/js/app.js"></script>
+</body>
+
+</html>

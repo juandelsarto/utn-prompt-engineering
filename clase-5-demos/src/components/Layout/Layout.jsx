@@ -9,7 +9,7 @@ const Layout = ({ children }) => {
           <div className="container-fluid d-flex justify-content-between align-items-center">
             <Link className="navbar-brand d-flex align-items-center" to="/">
               <i className='bx bxs-pizza me-2'></i>
-              <span>Bootstrap</span>
+              <span>ñam menú</span>
             </Link>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon"></span>

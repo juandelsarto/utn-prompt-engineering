@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { getAllMattresses } from "../services/mattress.js";
 import { Layout } from "../components/Layout";
 
 const Products = () => {
-  const [mattresses, setMattresses] = useState([]);
-
-  useEffect(() => {
-    const fetchMattresses = async () => {
-      const data = await getAllMattresses();
-      setMattresses(data);
-    };
-    fetchMattresses();
-  }, []);
+  // Uso de useQuery
+  const { data: mattresses = [] } = useQuery(
+    ["mattresses"],
+    getAllMattresses,
+    {
+      staleTime: 1000 * 60 * 5,
+      refetchInterval: 1000 * 30, // Hace refetch cada 30 segundos
+    }
+  );
 
   return (
     <Layout>

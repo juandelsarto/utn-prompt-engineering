@@ -1,23 +1,35 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useQuery, useQueryClient } from "react-query";
 import { addMattress, updateMattress, deleteMattress, getAllMattresses } from "../services/mattress.js";
 import { Layout } from "../components/Layout";
+import { Toast } from "../components/Toast"; // Importamos el componente Toast
+import { Modal } from "../components/Modal"; // Importamos el componente Modal
 
 const Dashboard = () => {
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     name: "",
     dimensions: "",
     material: "",
     price: ""
   });
-  const [mattresses, setMattresses] = useState([]);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [toast, setToast] = useState({ message: "", type: "" });
+  const [modal, setModal] = useState({ isActive: false, message: "", onConfirm: null });
 
-  useEffect(() => {
-    const fetchMattresses = async () => {
-      const mattresses = await getAllMattresses();
-      setMattresses(mattresses);
-    };
-    fetchMattresses();
-  }, []);
+  const { data: mattresses = [] } = useQuery(
+    ["mattresses"],
+    getAllMattresses,
+    {
+      staleTime: 1000 * 60 * 5,
+      refetchInterval: 1000 * 30,
+    }
+  );
+
+  const showToast = (message, type) => {
+    setToast({ message, type });
+    setTimeout(() => setToast({ message: "", type: "" }), 3000);
+  };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,43 +37,41 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addMattress(formData);
-    alert("Mattress added successfully!");
+    if (isUpdating) {
+      await updateMattress(formData._id, formData);
+      showToast("Mattress updated successfully!", "success");
+    } else {
+      await addMattress(formData);
+      showToast("Mattress added successfully!", "success");
+    }
     setFormData({ name: "", dimensions: "", material: "", price: "" });
-    // Refetch mattresses after adding
-    const mattresses = await getAllMattresses();
-    setMattresses(mattresses);
+    setIsUpdating(false);
+    queryClient.invalidateQueries(["mattresses"]);
   };
 
-  const handleEdit = async (id) => {
-    const mattress = mattresses.find((m) => m.id === id);
+  const handleEdit = (mattress) => {
+    const { _id, name, dimensions, material, price } = mattress;
     setFormData({
-      id: mattress.id,
-      name: mattress.name,
-      dimensions: mattress.dimensions,
-      material: mattress.material,
-      price: mattress.price
+      _id,
+      name,
+      dimensions,
+      material,
+      price
     });
-  };
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    await updateMattress(formData.id, formData);
-    alert("Mattress updated successfully!");
-    setFormData({ name: "", dimensions: "", material: "", price: "" });
-    // Refetch mattresses after update
-    const mattresses = await getAllMattresses();
-    setMattresses(mattresses);
+    setIsUpdating(true);
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this mattress?")) {
-      await deleteMattress(id);
-      alert("Mattress deleted successfully!");
-      // Refetch mattresses after deletion
-      const mattresses = await getAllMattresses();
-      setMattresses(mattresses);
-    }
+    setModal({
+      isActive: true,
+      message: "Are you sure you want to delete this mattress?",
+      onConfirm: async () => {
+        await deleteMattress(id);
+        showToast("Mattress deleted successfully!", "success");
+        queryClient.invalidateQueries(["mattresses"]);
+        setModal({ isActive: false, message: "", onConfirm: null });
+      }
+    });
   };
 
   return (
@@ -124,53 +134,67 @@ const Dashboard = () => {
             </div>
             <div className="control">
               <button className="button is-primary" type="submit">
-                Add Mattress
+                {isUpdating ? "Update Mattress" : "Add Mattress"}
               </button>
-              {formData.name && (
-                <button className="button is-warning ml-2" onClick={handleUpdate}>
-                  Update Mattress
-                </button>
-              )}
             </div>
           </form>
 
-          <table className="table is-fullwidth is-striped mt-5">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Dimensions</th>
-                <th>Material</th>
-                <th>Price</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mattresses.map((mattress) => (
-                <tr key={mattress.id}>
-                  <td>{mattress.name}</td>
-                  <td>{mattress.dimensions}</td>
-                  <td>{mattress.material}</td>
-                  <td>{mattress.price}</td>
-                  <td>
-                    <button
-                      className="button is-info is-small"
-                      onClick={() => handleEdit(mattress.id)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="button is-danger is-small ml-2"
-                      onClick={() => handleDelete(mattress.id)}
-                    >
-                      Delete
-                    </button>
-                  </td>
+          {
+            mattresses.length > 0 ? <table className="table is-fullwidth is-striped mt-5">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Dimensions</th>
+                  <th>Material</th>
+                  <th>Price</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {mattresses.map((mattress) => (
+                  <tr key={mattress._id}>
+                    <td>{mattress.name}</td>
+                    <td>{mattress.dimensions}</td>
+                    <td>{mattress.material}</td>
+                    <td>{mattress.price}</td>
+                    <td>
+                      <button
+                        className="button is-info is-small"
+                        onClick={() => handleEdit(mattress)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="button is-danger is-small ml-2"
+                        onClick={() => handleDelete(mattress._id)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table> : <div className="notification is-warning has-text-centered mt-5">
+              <h2 className="title is-4">No hay colchones disponibles</h2>
+              <p>Por favor, añade un colchón para que aparezca en la lista.</p>
+            </div>
+          }
         </div>
       </section>
+
+      {/* Componente Toast */}
+      {toast.message && (
+        <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "" })} />
+      )}
+
+      {/* Componente Modal */}
+      <Modal
+        isActive={modal.isActive}
+        title="Confirmation"
+        message={modal.message}
+        onConfirm={modal.onConfirm}
+        onCancel={() => setModal({ isActive: false, message: "", onConfirm: null })}
+      />
     </Layout>
   );
 };

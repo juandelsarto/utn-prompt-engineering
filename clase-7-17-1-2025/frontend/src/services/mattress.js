@@ -18,7 +18,6 @@ export const addMattress = async (mattress) => {
 };
 
 export const updateMattress = async (id, mattress) => {
-  console.log(id, mattress)
   const response = await axios.put(`${BASE_URL}/${id}`, mattress);
   return response.data;
 };

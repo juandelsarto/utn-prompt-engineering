@@ -42,7 +42,7 @@ const ProductPreviewModal = ({ isOpen, onClose, mattress }) => {
               </HStack>
             </HStack>
             <Button colorScheme="blue" size="lg">
-              Add to Cart
+              Añadir al carrito
             </Button>
           </VStack>
         </ModalBody>

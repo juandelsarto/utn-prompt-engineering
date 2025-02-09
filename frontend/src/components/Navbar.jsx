@@ -16,27 +16,29 @@ export const Navbar = () => {
     <Box as="nav" bg="teal.500" py={3}>
       <Container maxW="container.xl">
         <Flex justify="space-between" align="center">
-          <Image src={logo} boxSize={16} />
+          <Link to={routes.home}>
+            <Image src={logo} boxSize={16} />
+          </Link>
           <HStack gap={6}>
             <Link to={routes.home}>
               <Button variant="link" colorScheme="whiteAlpha">
-                Home
+                Inicio
               </Button>
             </Link>
             {user ? (
               <>
                 <Link to={routes.dashboard}>
                   <Button variant="link" colorScheme="whiteAlpha" mr={3}>
-                    Dashboard
+                    Panel de control
                   </Button>
                 </Link>
                 <Button colorScheme="whiteAlpha" onClick={handleLogout}>
-                  Logout
+                  Cerrar sesión
                 </Button>
               </>
             ) : (
               <Link to={routes.login}>
-                <Button colorScheme="whiteAlpha">Login</Button>
+                <Button colorScheme="whiteAlpha">Iniciar sesión</Button>
               </Link>
             )}
           </HStack>

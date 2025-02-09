@@ -23,7 +23,7 @@ const Hero = () => {
         alignItems="center"
       >
         <Heading fontSize={48} color="white">
-          Welcome to our store
+          Bienvenido a nuestra tienda
         </Heading>
       </Box>
     </Box>

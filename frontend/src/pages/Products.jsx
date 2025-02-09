@@ -1,4 +1,11 @@
-import { Box, Container, Heading, SimpleGrid } from "@chakra-ui/react";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Container,
+  Heading,
+  SimpleGrid,
+} from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { Layout } from "../components/Layout";
 import { ProductCard } from "../components/ProductCard.jsx";
@@ -15,14 +22,32 @@ const Products = () => {
     <Layout>
       <Box py={8}>
         <Container maxW="container.xl">
-          <Heading fontSize={24} mb={3}>
-            Our products
-          </Heading>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {mattresses.map((mattress) => (
-              <ProductCard key={mattress._id} mattress={mattress} />
-            ))}
-          </SimpleGrid>
+          {mattresses.length === 0 ? (
+            <Alert
+              status="warning"
+              variant="subtle"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+              height="200px"
+            >
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                No hay productos
+              </AlertTitle>
+            </Alert>
+          ) : (
+            <>
+              <Heading fontSize={24} mb={3}>
+                Nuestros productos
+              </Heading>
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
+                {mattresses.map((mattress) => (
+                  <ProductCard key={mattress._id} mattress={mattress} />
+                ))}
+              </SimpleGrid>
+            </>
+          )}
         </Container>
       </Box>
     </Layout>

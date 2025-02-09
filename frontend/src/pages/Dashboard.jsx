@@ -6,11 +6,8 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
-  FormLabel,
   Heading,
   HStack,
-  Input,
   Table,
   Tbody,
   Td,
@@ -18,11 +15,11 @@ import {
   Thead,
   Tr,
   useToast,
-  VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { Layout } from "../components/Layout";
+import { MattressFormModal } from "../components/MattressFormModal";
 import { Modal } from "../components/Modal";
 import {
   addMattress,
@@ -31,20 +28,23 @@ import {
   updateMattress,
 } from "../services/mattress.js";
 
+const initialMattressData = {
+  name: "",
+  dimensions: "",
+  material: "",
+  price: "",
+};
+
 const Dashboard = () => {
   const queryClient = useQueryClient();
-  const [formData, setFormData] = useState({
-    name: "",
-    dimensions: "",
-    material: "",
-    price: "",
-  });
+  const [formData, setFormData] = useState(initialMattressData);
   const [isUpdating, setIsUpdating] = useState(false);
   const [modal, setModal] = useState({
     isActive: false,
     message: "",
     onConfirm: null,
   });
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
 
   const toast = useToast();
 
@@ -68,16 +68,21 @@ const Dashboard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isUpdating) {
-      await updateMattress(formData._id, formData);
-      showToast("Mattress updated successfully!", "success");
-    } else {
-      await addMattress(formData);
-      showToast("Mattress added successfully!", "success");
+    try {
+      if (isUpdating) {
+        await updateMattress(formData._id, formData);
+        showToast("Mattress updated successfully!", "success");
+      } else {
+        await addMattress(formData);
+        showToast("Mattress added successfully!", "success");
+      }
+      setFormData({ name: "", dimensions: "", material: "", price: "" });
+      setIsUpdating(false);
+      setIsFormModalOpen(false);
+      queryClient.invalidateQueries(["mattresses"]);
+    } catch (error) {
+      showToast("Error processing your request", "error");
     }
-    setFormData({ name: "", dimensions: "", material: "", price: "" });
-    setIsUpdating(false);
-    queryClient.invalidateQueries(["mattresses"]);
   };
 
   const handleEdit = (mattress) => {
@@ -90,6 +95,7 @@ const Dashboard = () => {
       price,
     });
     setIsUpdating(true);
+    setIsFormModalOpen(true);
   };
 
   const handleDelete = async (id) => {
@@ -109,65 +115,29 @@ const Dashboard = () => {
     <Layout>
       <Box py={8}>
         <Container maxW="container.xl">
-          <Heading mb={6}>Dashboard</Heading>
-
-          <Box as="form" onSubmit={handleSubmit} mb={8}>
-            <VStack spacing={4} align="stretch">
-              <FormControl isRequired>
-                <FormLabel>Name</FormLabel>
-                <Input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                />
-              </FormControl>
-
-              <FormControl isRequired>
-                <FormLabel>Dimensions</FormLabel>
-                <Input
-                  type="text"
-                  name="dimensions"
-                  value={formData.dimensions}
-                  onChange={handleChange}
-                />
-              </FormControl>
-
-              <FormControl isRequired>
-                <FormLabel>Material</FormLabel>
-                <Input
-                  type="text"
-                  name="material"
-                  value={formData.material}
-                  onChange={handleChange}
-                />
-              </FormControl>
-
-              <FormControl isRequired>
-                <FormLabel>Price</FormLabel>
-                <Input
-                  type="number"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleChange}
-                />
-              </FormControl>
-
-              <Button type="submit" colorScheme="blue">
-                {isUpdating ? "Update Mattress" : "Add Mattress"}
-              </Button>
-            </VStack>
-          </Box>
+          <HStack justify="space-between" mb={6}>
+            <Heading>Dashboard</Heading>
+            <Button
+              colorScheme="blue"
+              onClick={() => {
+                setIsUpdating(false);
+                setFormData(initialMattressData);
+                setIsFormModalOpen(true);
+              }}
+            >
+              Agregar nuevo colchón
+            </Button>
+          </HStack>
 
           {mattresses.length > 0 ? (
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th>Name</Th>
-                  <Th>Dimensions</Th>
+                  <Th>Nombre</Th>
+                  <Th>Dimensiones</Th>
                   <Th>Material</Th>
-                  <Th>Price</Th>
-                  <Th>Actions</Th>
+                  <Th>Precio</Th>
+                  <Th>Acciones</Th>
                 </Tr>
               </Thead>
               <Tbody>
@@ -184,14 +154,14 @@ const Dashboard = () => {
                           colorScheme="blue"
                           onClick={() => handleEdit(mattress)}
                         >
-                          Edit
+                          Editar
                         </Button>
                         <Button
                           size="sm"
                           colorScheme="red"
                           onClick={() => handleDelete(mattress._id)}
                         >
-                          Delete
+                          Eliminar
                         </Button>
                       </HStack>
                     </Td>
@@ -221,9 +191,18 @@ const Dashboard = () => {
         </Container>
       </Box>
 
+      <MattressFormModal
+        isOpen={isFormModalOpen}
+        onClose={() => setIsFormModalOpen(false)}
+        formData={formData}
+        isUpdating={isUpdating}
+        onChange={handleChange}
+        onSubmit={handleSubmit}
+      />
+
       <Modal
         isActive={modal.isActive}
-        title="Confirmation"
+        title="Confirmación"
         message={modal.message}
         onConfirm={modal.onConfirm}
         onCancel={() =>

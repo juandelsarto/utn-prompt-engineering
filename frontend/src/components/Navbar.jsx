@@ -13,14 +13,14 @@ export const Navbar = () => {
   };
 
   return (
-    <Box as="Navbar" bg="teal.500" py={3}>
+    <Box as="nav" bg="teal.500" py={3}>
       <Container maxW="container.xl">
         <Flex justify="space-between" align="center">
           <Image src={logo} boxSize={16} />
           <HStack gap={6}>
             <Link to={routes.home}>
               <Button variant="link" colorScheme="whiteAlpha">
-                Products
+                Home
               </Button>
             </Link>
             {user ? (

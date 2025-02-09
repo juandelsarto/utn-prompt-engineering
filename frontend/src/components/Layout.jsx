@@ -1,4 +1,5 @@
 import { Box, Container, Text } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 import { useLocation } from "react-router-dom";
 import routes from "../router/routes";
 import { Hero } from "./Hero";
@@ -25,6 +26,10 @@ const Layout = ({ children }) => {
       </Box>
     </Box>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
 };
 
 export { Layout };

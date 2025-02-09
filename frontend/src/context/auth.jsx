@@ -1,4 +1,5 @@
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import PropTypes from "prop-types";
 import React, { createContext, useEffect, useState } from "react";
 import { auth } from "../services/firebase"; // Asegúrate de que auth esté configurado correctamente
 
@@ -32,4 +33,8 @@ export const AuthProvider = ({ children }) => {
 // Custom hook para acceder al contexto
 export const useAuth = () => {
   return React.useContext(AuthContext);
+};
+
+AuthProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

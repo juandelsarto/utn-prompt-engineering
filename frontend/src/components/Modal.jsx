@@ -7,6 +7,7 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import PropTypes from "prop-types";
 
 const Modal = ({ isActive, title, message, onConfirm, onCancel }) => {
   return (
@@ -26,6 +27,14 @@ const Modal = ({ isActive, title, message, onConfirm, onCancel }) => {
       </ModalContent>
     </ChakraModal>
   );
+};
+
+Modal.propTypes = {
+  isActive: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  message: PropTypes.string.isRequired,
+  onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
 export { Modal };

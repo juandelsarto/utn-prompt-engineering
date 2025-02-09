@@ -1,32 +1,75 @@
-import { Box, Button, Container, Flex, HStack, Image } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Image,
+  Text,
+} from "@chakra-ui/react";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useAuth } from "../context/auth";
 import routes from "../router/routes";
+import { getCart } from "../utilities";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const handleLogout = () => {
     logout();
-    navigate(routes.login);
+    navigate(routes.home);
   };
+
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const cart = getCart();
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      setCartCount(count);
+    };
+
+    updateCartCount();
+
+    // Listen for storage changes
+    window.addEventListener("storage", updateCartCount);
+
+    return () => {
+      window.removeEventListener("storage", updateCartCount);
+    };
+  }, []);
 
   return (
     <Box as="nav" bg="teal.500" py={3}>
       <Container maxW="container.xl">
         <Flex justify="space-between" align="center">
-          <Link to={routes.home}>
-            <Image src={logo} boxSize={16} />
-          </Link>
           <HStack gap={6}>
+            <Link to={routes.home}>
+              <Image src={logo} boxSize={16} />
+            </Link>
             <Link to={routes.home}>
               <Button variant="link" colorScheme="whiteAlpha">
                 Inicio
               </Button>
             </Link>
+            <Link to={routes.cart}>
+              <Button
+                leftIcon={<FontAwesomeIcon icon={faShoppingCart} />}
+                variant="link"
+                colorScheme="whiteAlpha"
+              >
+                Mi Carrito ({cartCount})
+              </Button>
+            </Link>
+          </HStack>
+          <HStack gap={6}>
             {user ? (
               <>
+                <Text>Hola, {user.displayName}</Text>
                 <Link to={routes.dashboard}>
                   <Button variant="link" colorScheme="whiteAlpha" mr={3}>
                     Panel de control
@@ -37,9 +80,11 @@ export const Navbar = () => {
                 </Button>
               </>
             ) : (
-              <Link to={routes.login}>
-                <Button colorScheme="whiteAlpha">Iniciar sesión</Button>
-              </Link>
+              <>
+                <Link to={routes.login}>
+                  <Button colorScheme="whiteAlpha">Iniciar sesión</Button>
+                </Link>
+              </>
             )}
           </HStack>
         </Flex>

@@ -37,7 +37,7 @@ import {
 import { formatPrice } from "../utilities/index.js";
 
 const initialMattressData = {
-  image: "",
+  image: null,
   name: "",
   dimensions: "",
   material: "",
@@ -160,7 +160,11 @@ const Dashboard = () => {
                     <Tr key={mattress._id}>
                       <Td>
                         <Image
-                          src={mattress.image ?? defaultImage}
+                          src={
+                            mattress.image !== ""
+                              ? mattress.image
+                              : defaultImage
+                          }
                           alt={mattress.name}
                           boxSize={12}
                           objectFit="cover"

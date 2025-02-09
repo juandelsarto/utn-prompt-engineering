@@ -10,7 +10,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
-import placeholder from "../assets/no-image-placeholder.svg";
+import defaultImage from "../assets/no-image-placeholder.svg";
 import {
   MattressDimensions,
   MattressMaterialType,
@@ -31,7 +31,9 @@ const ProductCard = ({ mattress }) => {
         _hover={{ transform: "scale(1.02)", transition: "transform 0.2s" }}
       >
         <Box
-          backgroundImage={mattress.image ?? placeholder}
+          backgroundImage={
+            mattress.image !== "" ? mattress.image : defaultImage
+          }
           backgroundSize={!mattress.image ? "auto 100%" : "cover"}
           backgroundPosition="center"
           backgroundRepeat="no-repeat"

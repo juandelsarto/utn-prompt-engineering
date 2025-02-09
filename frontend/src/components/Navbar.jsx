@@ -56,20 +56,22 @@ export const Navbar = () => {
                 Inicio
               </Button>
             </Link>
-            <Link to={routes.cart}>
-              <Button
-                leftIcon={<FontAwesomeIcon icon={faShoppingCart} />}
-                variant="link"
-                colorScheme="whiteAlpha"
-              >
-                Mi Carrito ({cartCount})
-              </Button>
-            </Link>
+            {!user && (
+              <Link to={routes.cart}>
+                <Button
+                  leftIcon={<FontAwesomeIcon icon={faShoppingCart} />}
+                  variant="link"
+                  colorScheme="whiteAlpha"
+                >
+                  Mi Carrito ({cartCount})
+                </Button>
+              </Link>
+            )}
           </HStack>
           <HStack gap={6}>
             {user ? (
               <>
-                <Text>Hola, {user.displayName}</Text>
+                <Text color="white">Hola, {user.displayName}</Text>
                 <Link to={routes.dashboard}>
                   <Button variant="link" colorScheme="whiteAlpha" mr={3}>
                     Panel de control

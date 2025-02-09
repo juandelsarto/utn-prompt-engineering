@@ -1,54 +1,29 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/auth";
-import "bulma/css/bulma.min.css";
+import { Box, Container, Text } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
+import routes from "../router/routes";
+import { Hero } from "./Hero";
+import { Navbar } from "./Navbar";
 
 const Layout = ({ children }) => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+  const isHome = location.pathname === routes.home;
 
   return (
-    <>
-      <header className="has-background-primary p-3">
-        <nav className="container">
-          <ul className="is-flex is-justify-content-space-between">
-            <li>
-              <Link className="button is-light mr-3" to={"/"}>
-                Products
-              </Link>
-            </li>
-            <li>
-              {user ? (
-                <>
-                  <Link className="button is-light mr-3" to={"/dashboard"}>
-                    Dashboard
-                  </Link>
-                  <button className="button is-light" onClick={handleLogout}>
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <Link className="button is-light" to={"/login"}>
-                  Login
-                </Link>
-              )}
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main style={{ minHeight: "100vh" }} className="container mt-5">
-        {children}
-      </main>
-      <footer className="footer has-background-light p-4">
-        <div className="content has-text-centered">
-          <h4>Sitio creado por Gabriel Alberini</h4>
-        </div>
-      </footer>
-    </>
+    <Box>
+      <Navbar />
+      <Box as="main" minH="100vh">
+        {isHome && <Hero />}
+        <Container maxW="container.xl" mt={5}>
+          {children}
+        </Container>
+      </Box>
+      <Box as="footer" bg="gray.100" py={4}>
+        <Container maxW="container.xl">
+          <Text textAlign="center">Sitio creado por Gabriel Alberini</Text>
+        </Container>
+      </Box>
+    </Box>
   );
 };
 

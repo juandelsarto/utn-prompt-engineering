@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import React, { createContext, useEffect, useState } from "react";
 import { auth } from "../services/firebase"; // Asegúrate de que auth esté configurado correctamente
 
 // Creamos el contexto para manejar la autenticación global

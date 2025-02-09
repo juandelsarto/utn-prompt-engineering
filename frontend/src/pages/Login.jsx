@@ -1,7 +1,19 @@
-import React, { useState } from "react";
-import { loginWithGoogle } from "../services/auth.js"; // Importamos la función de login con Google
+import {
+  Alert,
+  AlertIcon,
+  Box,
+  Button,
+  Link as ChakraLink,
+  Container,
+  Heading,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth.jsx"; // Importamos el contexto de autenticación
+import routes from "../router/routes.js";
+import { loginWithGoogle } from "../services/auth.js"; // Importamos la función de login con Google
 
 const Login = () => {
   const [error, setError] = useState(null);
@@ -12,7 +24,7 @@ const Login = () => {
     try {
       const loggedInUser = await loginWithGoogle(); // Iniciamos sesión con Google
       console.log(loggedInUser); // Puedes ver los detalles del usuario aquí
-      navigate("/"); // Redirigir al home si el login es exitoso
+      navigate(routes.home); // Redirigir al home si el login es exitoso
     } catch (err) {
       console.log(err);
       setError("Error al iniciar sesión con Google. Intenta de nuevo.");
@@ -21,40 +33,42 @@ const Login = () => {
 
   // Si ya está logueado, redirigir automáticamente
   if (user) {
-    navigate("/"); // Redirige al home si ya está autenticado
+    navigate(routes.home); // Redirige al home si ya está autenticado
   }
 
   return (
-    <div className="login-container">
-      <section className="section">
-        <div className="container">
-          <div className="columns is-centered">
-            <div className="column is-half">
-              <div className="box">
-                <h1 className="title is-4">Iniciar sesión con Google</h1>
+    <Box minH="100vh" py={10} bg="gray.50">
+      <Container maxW="container.sm">
+        <Box bg="white" p={8} borderRadius="lg" boxShadow="md">
+          <VStack spacing={6}>
+            <Heading size="lg">Iniciar sesión con Google</Heading>
 
-                {error && <div className="notification is-danger">{error}</div>}
+            {error && (
+              <Alert status="error" borderRadius="md">
+                <AlertIcon />
+                {error}
+              </Alert>
+            )}
 
-                <div className="field">
-                  <div className="control">
-                    <button
-                      className="button is-danger is-fullwidth"
-                      onClick={handleLoginWithGoogle}
-                    >
-                      Iniciar sesión con Google
-                    </button>
-                  </div>
-                </div>
+            <Button
+              colorScheme="red"
+              size="lg"
+              width="full"
+              onClick={handleLoginWithGoogle}
+            >
+              Iniciar sesión con Google
+            </Button>
 
-                <div className="has-text-centered">
-                  <a href="/registro">¿No tienes cuenta? Regístrate</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+            <Text>
+              ¿No tienes cuenta?{" "}
+              <ChakraLink color="blue.500" href="/registro">
+                Regístrate
+              </ChakraLink>
+            </Text>
+          </VStack>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

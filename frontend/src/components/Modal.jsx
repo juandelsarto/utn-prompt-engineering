@@ -1,26 +1,31 @@
+import {
+  Button,
+  Modal as ChakraModal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/react";
+
 const Modal = ({ isActive, title, message, onConfirm, onCancel }) => {
   return (
-    <div className={`modal ${isActive ? "is-active" : ""}`}>
-      <div className="modal-background" onClick={onCancel}></div>
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">{title}</p>
-          <button className="delete" aria-label="close" onClick={onCancel}></button>
-        </header>
-        <section className="modal-card-body">
-          <p>{message}</p>
-        </section>
-        <footer className="modal-card-foot">
-          <button className="button is-danger mr-3" onClick={onConfirm}>
+    <ChakraModal isOpen={isActive} onClose={onCancel}>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>{title}</ModalHeader>
+        <ModalBody>{message}</ModalBody>
+        <ModalFooter>
+          <Button colorScheme="red" mr={3} onClick={onConfirm}>
             Confirm
-          </button>
-          <button className="button" onClick={onCancel}>
+          </Button>
+          <Button variant="ghost" onClick={onCancel}>
             Cancel
-          </button>
-        </footer>
-      </div>
-    </div>
+          </Button>
+        </ModalFooter>
+      </ModalContent>
+    </ChakraModal>
   );
 };
 
-export { Modal }
+export { Modal };

@@ -1,9 +1,35 @@
-import React, { useState } from "react";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  HStack,
+  Input,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useToast,
+  VStack,
+} from "@chakra-ui/react";
+import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
-import { addMattress, updateMattress, deleteMattress, getAllMattresses } from "../services/mattress.js";
 import { Layout } from "../components/Layout";
-import { Toast } from "../components/Toast"; // Importamos el componente Toast
-import { Modal } from "../components/Modal"; // Importamos el componente Modal
+import { Modal } from "../components/Modal";
+import {
+  addMattress,
+  deleteMattress,
+  getAllMattresses,
+  updateMattress,
+} from "../services/mattress.js";
 
 const Dashboard = () => {
   const queryClient = useQueryClient();
@@ -11,24 +37,29 @@ const Dashboard = () => {
     name: "",
     dimensions: "",
     material: "",
-    price: ""
+    price: "",
   });
   const [isUpdating, setIsUpdating] = useState(false);
-  const [toast, setToast] = useState({ message: "", type: "" });
-  const [modal, setModal] = useState({ isActive: false, message: "", onConfirm: null });
+  const [modal, setModal] = useState({
+    isActive: false,
+    message: "",
+    onConfirm: null,
+  });
 
-  const { data: mattresses = [] } = useQuery(
-    ["mattresses"],
-    getAllMattresses,
-    {
-      staleTime: 1000 * 60 * 5,
-      refetchInterval: 1000 * 30,
-    }
-  );
+  const toast = useToast();
+
+  const { data: mattresses = [] } = useQuery(["mattresses"], getAllMattresses, {
+    staleTime: 1000 * 60 * 5,
+    refetchInterval: 1000 * 30,
+  });
 
   const showToast = (message, type) => {
-    setToast({ message, type });
-    setTimeout(() => setToast({ message: "", type: "" }), 3000);
+    toast({
+      title: message,
+      status: type,
+      duration: 2000,
+      containerStyle: { marginBottom: 12 },
+    });
   };
 
   const handleChange = (e) => {
@@ -56,7 +87,7 @@ const Dashboard = () => {
       name,
       dimensions,
       material,
-      price
+      price,
     });
     setIsUpdating(true);
   };
@@ -70,130 +101,134 @@ const Dashboard = () => {
         showToast("Mattress deleted successfully!", "success");
         queryClient.invalidateQueries(["mattresses"]);
         setModal({ isActive: false, message: "", onConfirm: null });
-      }
+      },
     });
   };
 
   return (
     <Layout>
-      <section className="section">
-        <div className="container">
-          <h1 className="title">Dashboard</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="field">
-              <label className="label">Name</label>
-              <div className="control">
-                <input
-                  className="input"
+      <Box py={8}>
+        <Container maxW="container.xl">
+          <Heading mb={6}>Dashboard</Heading>
+
+          <Box as="form" onSubmit={handleSubmit} mb={8}>
+            <VStack spacing={4} align="stretch">
+              <FormControl isRequired>
+                <FormLabel>Name</FormLabel>
+                <Input
                   type="text"
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  required
                 />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Dimensions</label>
-              <div className="control">
-                <input
-                  className="input"
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Dimensions</FormLabel>
+                <Input
                   type="text"
                   name="dimensions"
                   value={formData.dimensions}
                   onChange={handleChange}
-                  required
                 />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Material</label>
-              <div className="control">
-                <input
-                  className="input"
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Material</FormLabel>
+                <Input
                   type="text"
                   name="material"
                   value={formData.material}
                   onChange={handleChange}
-                  required
                 />
-              </div>
-            </div>
-            <div className="field">
-              <label className="label">Price</label>
-              <div className="control">
-                <input
-                  className="input"
+              </FormControl>
+
+              <FormControl isRequired>
+                <FormLabel>Price</FormLabel>
+                <Input
                   type="number"
                   name="price"
                   value={formData.price}
                   onChange={handleChange}
-                  required
                 />
-              </div>
-            </div>
-            <div className="control">
-              <button className="button is-primary" type="submit">
+              </FormControl>
+
+              <Button type="submit" colorScheme="blue">
                 {isUpdating ? "Update Mattress" : "Add Mattress"}
-              </button>
-            </div>
-          </form>
+              </Button>
+            </VStack>
+          </Box>
 
-          {
-            mattresses.length > 0 ? <table className="table is-fullwidth is-striped mt-5">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Dimensions</th>
-                  <th>Material</th>
-                  <th>Price</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
+          {mattresses.length > 0 ? (
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Dimensions</Th>
+                  <Th>Material</Th>
+                  <Th>Price</Th>
+                  <Th>Actions</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
                 {mattresses.map((mattress) => (
-                  <tr key={mattress._id}>
-                    <td>{mattress.name}</td>
-                    <td>{mattress.dimensions}</td>
-                    <td>{mattress.material}</td>
-                    <td>{mattress.price}</td>
-                    <td>
-                      <button
-                        className="button is-info is-small"
-                        onClick={() => handleEdit(mattress)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="button is-danger is-small ml-2"
-                        onClick={() => handleDelete(mattress._id)}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
+                  <Tr key={mattress._id}>
+                    <Td>{mattress.name}</Td>
+                    <Td>{mattress.dimensions}</Td>
+                    <Td>{mattress.material}</Td>
+                    <Td>${mattress.price}</Td>
+                    <Td>
+                      <HStack spacing={2}>
+                        <Button
+                          size="sm"
+                          colorScheme="blue"
+                          onClick={() => handleEdit(mattress)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          colorScheme="red"
+                          onClick={() => handleDelete(mattress._id)}
+                        >
+                          Delete
+                        </Button>
+                      </HStack>
+                    </Td>
+                  </Tr>
                 ))}
-              </tbody>
-            </table> : <div className="notification is-warning has-text-centered mt-5">
-              <h2 className="title is-4">No hay colchones disponibles</h2>
-              <p>Por favor, añade un colchón para que aparezca en la lista.</p>
-            </div>
-          }
-        </div>
-      </section>
+              </Tbody>
+            </Table>
+          ) : (
+            <Alert
+              status="warning"
+              variant="subtle"
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              textAlign="center"
+              height="200px"
+            >
+              <AlertIcon boxSize="40px" mr={0} />
+              <AlertTitle mt={4} mb={1} fontSize="lg">
+                No hay colchones disponibles
+              </AlertTitle>
+              <AlertDescription maxWidth="sm">
+                Por favor, añade un colchón para que aparezca en la lista.
+              </AlertDescription>
+            </Alert>
+          )}
+        </Container>
+      </Box>
 
-      {/* Componente Toast */}
-      {toast.message && (
-        <Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "" })} />
-      )}
-
-      {/* Componente Modal */}
       <Modal
         isActive={modal.isActive}
         title="Confirmation"
         message={modal.message}
         onConfirm={modal.onConfirm}
-        onCancel={() => setModal({ isActive: false, message: "", onConfirm: null })}
+        onCancel={() =>
+          setModal({ isActive: false, message: "", onConfirm: null })
+        }
       />
     </Layout>
   );

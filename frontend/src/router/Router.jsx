@@ -1,8 +1,9 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { Dashboard } from "../pages/Dashboard.jsx";
-import { Products } from "../pages/Products.jsx";
-import { Login } from "../pages/Login.jsx";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../context/auth.jsx";
+import { Dashboard } from "../pages/Dashboard.jsx";
+import { Login } from "../pages/Login.jsx";
+import { Products } from "../pages/Products.jsx";
+import routes from "./routes.js";
 
 function Router() {
   const { user } = useAuth();
@@ -10,12 +11,12 @@ function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Products />} />
+        <Route path={routes.home} element={<Products />} />
         <Route
-          path="/dashboard"
-          element={user ? <Dashboard /> : <Navigate to="/login" />}
+          path={routes.dashboard}
+          element={user ? <Dashboard /> : <Navigate to={routes.login} />}
         />
-        <Route path="/login" element={<Login />} />
+        <Route path={routes.login} element={<Login />} />
       </Routes>
     </BrowserRouter>
   );

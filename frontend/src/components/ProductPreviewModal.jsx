@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import placeholder from "../assets/no-image-placeholder.svg";
+import { formatPrice } from "../utilities";
 
 const ProductPreviewModal = ({ isOpen, onClose, mattress }) => {
   return (
@@ -32,9 +33,9 @@ const ProductPreviewModal = ({ isOpen, onClose, mattress }) => {
               width="100%"
               fallbackSrc={placeholder}
             />
-            <HStack justify="space-between">
+            <VStack align="flex-start" justify="space-between">
               <Text fontSize="2xl" fontWeight="bold">
-                ${mattress.price}
+                {formatPrice(mattress.price)}
               </Text>
               <HStack>
                 <Badge colorScheme="cyan">{mattress.dimensions}</Badge>

@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import placeholder from "../assets/no-image-placeholder.svg";
+import { formatPrice } from "../utilities/index";
 import { ProductPreviewModal } from "./ProductPreviewModal";
 
 const ProductCard = ({ mattress }) => {
@@ -38,7 +39,7 @@ const ProductCard = ({ mattress }) => {
           <Stack spacing={3}>
             <HStack justify="space-between">
               <Heading size="md">{mattress.name}</Heading>
-              <Text fontWeight="bold">${mattress.price}</Text>
+              <Text fontWeight="bold">{formatPrice(mattress.price)}</Text>
             </HStack>
             <HStack>
               <Badge colorScheme="cyan">{mattress.dimensions}</Badge>

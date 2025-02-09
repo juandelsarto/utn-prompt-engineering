@@ -27,6 +27,7 @@ import {
   getAllMattresses,
   updateMattress,
 } from "../services/mattress.js";
+import { formatPrice } from "../utilities/index.js";
 
 const initialMattressData = {
   name: "",
@@ -130,45 +131,7 @@ const Dashboard = () => {
           </HStack>
 
           {mattresses.length > 0 ? (
-            <Table variant="simple">
-              <Thead>
-                <Tr>
-                  <Th>Nombre</Th>
-                  <Th>Dimensiones</Th>
-                  <Th>Material</Th>
-                  <Th>Precio</Th>
-                  <Th>Acciones</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {mattresses.map((mattress) => (
-                  <Tr key={mattress._id}>
-                    <Td>{mattress.name}</Td>
-                    <Td>{mattress.dimensions}</Td>
-                    <Td>{mattress.material}</Td>
-                    <Td>${mattress.price}</Td>
-                    <Td>
-                      <HStack spacing={2}>
-                        <Button
-                          size="sm"
-                          colorScheme="blue"
-                          onClick={() => handleEdit(mattress)}
-                        >
-                          Editar
-                        </Button>
-                        <Button
-                          size="sm"
-                          colorScheme="red"
-                          onClick={() => handleDelete(mattress._id)}
-                        >
-                          Eliminar
-                        </Button>
-                      </HStack>
-                    </Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
+                      <Td>{formatPrice(mattress.price)}</Td>
           ) : (
             <Alert
               status="warning"

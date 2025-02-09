@@ -56,7 +56,7 @@ const MattressFormModal = ({
         <form onSubmit={onSubmit}>
           <ModalBody>
             <VStack spacing={4}>
-              <FormControl isRequired isInvalid={isImageUrlInvalid}>
+              <FormControl isInvalid={isImageUrlInvalid}>
                 <FormLabel>URL de la imagen</FormLabel>
                 <Input
                   type="text"

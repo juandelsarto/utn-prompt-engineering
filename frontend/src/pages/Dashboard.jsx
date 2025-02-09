@@ -8,6 +8,7 @@ import {
   Container,
   Heading,
   HStack,
+  Image,
   Table,
   Tbody,
   Td,
@@ -18,9 +19,15 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
+import defaultImage from "../assets/no-image-placeholder.svg";
 import { Layout } from "../components/Layout";
 import { MattressFormModal } from "../components/MattressFormModal";
 import { Modal } from "../components/Modal";
+import {
+  MattressDimensions,
+  MattressMaterialType,
+  MattressMterialTypeUnified,
+} from "../constants/mattress_form_options.js";
 import {
   addMattress,
   deleteMattress,
@@ -30,6 +37,7 @@ import {
 import { formatPrice } from "../utilities/index.js";
 
 const initialMattressData = {
+  image: "",
   name: "",
   dimensions: "",
   material: "",
@@ -77,22 +85,25 @@ const Dashboard = () => {
         await addMattress(formData);
         showToast("Mattress added successfully!", "success");
       }
-      setFormData({ name: "", dimensions: "", material: "", price: "" });
+      setFormData(initialMattressData);
       setIsUpdating(false);
       setIsFormModalOpen(false);
       queryClient.invalidateQueries(["mattresses"]);
     } catch (error) {
-      showToast("Error processing your request", "error");
+      showToast("Error processing your request", error.message);
     }
   };
 
   const handleEdit = (mattress) => {
-    const { _id, name, dimensions, material, price } = mattress;
+    const { _id, name, image, dimensions, material, materialType, price } =
+      mattress;
     setFormData({
       _id,
       name,
+      image,
       dimensions,
       material,
+      materialType,
       price,
     });
     setIsUpdating(true);
@@ -131,7 +142,61 @@ const Dashboard = () => {
           </HStack>
 
           {mattresses.length > 0 ? (
+            <Container maxW="container.xl" overflowX="auto">
+              <Table variant="simple">
+                <Thead>
+                  <Tr>
+                    <Th>Foto</Th>
+                    <Th>Nombre</Th>
+                    <Th>Dimensiones</Th>
+                    <Th>Material</Th>
+                    <Th>Tipo de material</Th>
+                    <Th>Precio</Th>
+                    <Th>Acciones</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {mattresses.map((mattress) => (
+                    <Tr key={mattress._id}>
+                      <Td>
+                        <Image
+                          src={mattress.image ?? defaultImage}
+                          alt={mattress.name}
+                          boxSize={12}
+                          objectFit="cover"
+                          borderRadius="md"
+                        />
+                      </Td>
+                      <Td>{mattress.name}</Td>
+                      <Td>{MattressDimensions[mattress.dimensions]}</Td>
+                      <Td>{MattressMaterialType[mattress.material]}</Td>
+                      <Td>
+                        {MattressMterialTypeUnified[mattress.materialType]}
+                      </Td>
                       <Td>{formatPrice(mattress.price)}</Td>
+                      <Td>
+                        <HStack spacing={2}>
+                          <Button
+                            size="sm"
+                            colorScheme="blue"
+                            onClick={() => handleEdit(mattress)}
+                          >
+                            Editar
+                          </Button>
+                          <Button
+                            size="sm"
+                            colorScheme="red"
+                            onClick={() => handleDelete(mattress._id)}
+                          >
+                            Eliminar
+                          </Button>
+                        </HStack>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </Container>
           ) : (
             <Alert
               status="warning"

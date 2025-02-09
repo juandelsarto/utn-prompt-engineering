@@ -14,6 +14,11 @@ import {
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import placeholder from "../assets/no-image-placeholder.svg";
+import {
+  MattressDimensions,
+  MattressMaterialType,
+  MattressMterialTypeUnified,
+} from "../constants/mattress_form_options";
 import { formatPrice } from "../utilities";
 
 const ProductPreviewModal = ({ isOpen, onClose, mattress }) => {
@@ -38,10 +43,17 @@ const ProductPreviewModal = ({ isOpen, onClose, mattress }) => {
                 {formatPrice(mattress.price)}
               </Text>
               <HStack>
-                <Badge colorScheme="cyan">{mattress.dimensions}</Badge>
-                <Badge colorScheme="green">{mattress.material}</Badge>
+                <Badge colorScheme="cyan">
+                  {MattressDimensions[mattress.dimensions]}
+                </Badge>
+                <Badge colorScheme="green">
+                  {MattressMaterialType[mattress.material]}
+                </Badge>
+                <Badge colorScheme="green">
+                  {MattressMterialTypeUnified[mattress.materialType]}
+                </Badge>
               </HStack>
-            </HStack>
+            </VStack>
             <Button colorScheme="blue" size="lg">
               Añadir al carrito
             </Button>

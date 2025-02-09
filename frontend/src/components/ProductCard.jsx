@@ -11,6 +11,10 @@ import {
 } from "@chakra-ui/react";
 import PropTypes from "prop-types";
 import placeholder from "../assets/no-image-placeholder.svg";
+import {
+  MattressDimensions,
+  MattressMaterialType,
+} from "../constants/mattress_form_options";
 import { formatPrice } from "../utilities/index";
 import { ProductPreviewModal } from "./ProductPreviewModal";
 
@@ -42,8 +46,12 @@ const ProductCard = ({ mattress }) => {
               <Text fontWeight="bold">{formatPrice(mattress.price)}</Text>
             </HStack>
             <HStack>
-              <Badge colorScheme="cyan">{mattress.dimensions}</Badge>
-              <Badge colorScheme="green">{mattress.material}</Badge>
+              <Badge colorScheme="cyan">
+                {MattressDimensions[mattress.dimensions]}
+              </Badge>
+              <Badge colorScheme="green">
+                {MattressMaterialType[mattress.material]}
+              </Badge>
             </HStack>
           </Stack>
         </CardBody>

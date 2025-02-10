@@ -20,8 +20,7 @@ const Login = () => {
 
   const handleLoginWithGoogle = async () => {
     try {
-      const loggedInUser = await loginWithGoogle(); // Iniciamos sesión con Google
-      console.log(loggedInUser); // Puedes ver los detalles del usuario aquí
+      await loginWithGoogle(); // Iniciamos sesión con Google
       navigate(routes.orders); // Redirigir al home si el login es exitoso
     } catch (err) {
       console.log(err);

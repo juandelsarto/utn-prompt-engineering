@@ -12,10 +12,13 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { ERRORS, FIELDS, VALIDATIONS } from "../constants/checkout";
+import routes from "../router/routes";
 import createOrder from "../services/order";
+import { getCartItems, getCartTotal } from "../utilities/cart";
 
 const initFormData = {
   // Customer information
@@ -30,9 +33,15 @@ const initFormData = {
 };
 
 const Checkout = () => {
-  const toast = useToast();
+  // States
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(initFormData);
+  const cartItems = getCartItems();
+  const cartTotal = getCartTotal();
+
+  // Hooks
+  const toast = useToast();
+  const navigate = useNavigate();
 
   // Add validation state
   const [errors, setErrors] = useState({
@@ -43,6 +52,7 @@ const Checkout = () => {
     [FIELDS.EXPIRATION_DATE]: "",
   });
 
+  // Validate field
   const validateField = (name, value) => {
     let error = "";
 
@@ -97,6 +107,7 @@ const Checkout = () => {
     return error === "";
   };
 
+  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     let formattedValue = value;
@@ -138,62 +149,81 @@ const Checkout = () => {
     validateField(name, formattedValue);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Handle form submission
+  const handleSubmit = useCallback(
+    async (e) => {
+      e.preventDefault();
 
-    // Validate all fields before submission
-    const fieldsToValidate = [
-      FIELDS.PHONE,
-      FIELDS.EMAIL,
-      FIELDS.CARD_NUMBER,
-      FIELDS.CVC,
-      FIELDS.EXPIRATION_DATE,
-    ];
-    const isValid = fieldsToValidate.every((field) =>
-      validateField(field, formData[field])
-    );
+      // Validate all fields before submission
+      const fieldsToValidate = [
+        FIELDS.PHONE,
+        FIELDS.EMAIL,
+        FIELDS.CARD_NUMBER,
+        FIELDS.CVC,
+        FIELDS.EXPIRATION_DATE,
+      ];
+      const isValid = fieldsToValidate.every((field) =>
+        validateField(field, formData[field])
+      );
 
-    if (!isValid) {
-      toast({
-        title: "Error de validación",
-        description:
-          "Por favor, verifica todos los campos y vuelve a intentarlo",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
+      if (!isValid) {
+        toast({
+          title: "Error de validación",
+          description:
+            "Por favor, verifica todos los campos y vuelve a intentarlo",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+        return;
+      }
 
-    setIsLoading(true);
+      setIsLoading(true);
 
-    try {
-      await createOrder(formData);
+      try {
+        await createOrder({
+          customer: {
+            name: formData[FIELDS.NAME],
+            email: formData[FIELDS.EMAIL],
+            phone: formData[FIELDS.PHONE],
+            direction: formData[FIELDS.DIRECTION],
+          },
+          payment: {
+            cardNumber: formData[FIELDS.CARD_NUMBER],
+            expirationDate: formData[FIELDS.EXPIRATION_DATE],
+          },
+          items: cartItems,
+          total: cartTotal,
+        });
 
-      toast({
-        title: "Compra exitosa",
-        description: "¡Gracias por tu compra!",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-      });
+        toast({
+          title: "Compra exitosa",
+          description: "¡Gracias por tu compra!",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
 
-      // Clear form
-      setFormData(initFormData);
-    } catch (error) {
-      console.error("Error submitting order:", error);
-      toast({
-        title: "Error",
-        description:
-          "Ocurrió un error al procesar tu compra. Por favor, inténtalo de nuevo.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+        // Clear form
+        setFormData(initFormData);
+        localStorage.removeItem("cart");
+        navigate(routes.home);
+      } catch (error) {
+        console.error("Error submitting order:", error);
+        toast({
+          title: "Error",
+          description:
+            "Ocurrió un error al procesar tu compra. Por favor, inténtalo de nuevo.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [formData, cartItems, cartTotal, toast]
+  );
 
   return (
     <Layout>

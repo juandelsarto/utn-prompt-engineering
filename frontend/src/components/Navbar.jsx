@@ -14,7 +14,7 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useAuth } from "../context/auth";
 import routes from "../router/routes";
-import { getCart } from "../utilities";
+import { getCart } from "../utilities/cart";
 
 export const Navbar = () => {
   const { user, logout } = useAuth();

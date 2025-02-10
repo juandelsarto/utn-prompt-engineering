@@ -1,14 +1,21 @@
-export const formatPrice = (price) => {
-  return price.toLocaleString("es-ES", {
-    style: "currency",
-    currency: "ARS",
-  });
-};
-
 // Cart management functions
 export const getCart = () => {
   const cart = localStorage.getItem("cart");
   return cart ? JSON.parse(cart) : [];
+};
+
+export const getCartItems = () => {
+  const cart = getCart();
+  return cart.map((item) => ({
+    productId: item._id,
+    quantity: item.quantity,
+    price: item.price,
+  }));
+};
+
+export const getCartTotal = () => {
+  const cart = getCart();
+  return cart.reduce((total, item) => total + item.price * item.quantity, 0);
 };
 
 export const addToCart = (product) => {

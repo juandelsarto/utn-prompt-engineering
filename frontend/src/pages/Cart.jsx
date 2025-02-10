@@ -23,7 +23,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import routes from "../router/routes";
-import { formatPrice, getCart, removeFromCart } from "../utilities";
+import { formatPrice, getCart, removeFromCart } from "../utilities/cart";
 
 const Cart = () => {
   const navigate = useNavigate();

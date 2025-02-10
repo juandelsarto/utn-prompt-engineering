@@ -29,7 +29,7 @@ import {
   MattressMterialTypeUnified,
 } from "../constants/mattress_form_options";
 import { useAuth } from "../context/auth";
-import { addToCart, formatPrice } from "../utilities";
+import { addToCart, formatPrice } from "../utilities/cart";
 
 const ProductPreviewModal = ({ isOpen, onClose, mattress }) => {
   const { user } = useAuth();

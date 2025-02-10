@@ -34,7 +34,7 @@ import {
   getAllMattresses,
   updateMattress,
 } from "../services/mattress.js";
-import { formatPrice } from "../utilities/index.js";
+import { formatPrice } from "../utilities/cart.js";
 
 const initialMattressData = {
   image: null,

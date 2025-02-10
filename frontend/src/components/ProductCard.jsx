@@ -15,7 +15,7 @@ import {
   MattressDimensions,
   MattressMaterialType,
 } from "../constants/mattress_form_options";
-import { formatPrice } from "../utilities/index";
+import { formatPrice } from "../utilities/cart";
 import { ProductPreviewModal } from "./ProductPreviewModal";
 
 const ProductCard = ({ mattress }) => {

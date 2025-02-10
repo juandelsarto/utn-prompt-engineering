@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../context/auth.jsx";
 import { Cart } from "../pages/Cart.jsx";
 import { Checkout } from "../pages/Checkout.jsx";
+import { CheckoutSuccess } from "../pages/CheckoutSuccess.jsx";
 import { Dashboard } from "../pages/Dashboard.jsx";
 import { Login } from "../pages/Login.jsx";
 import { Orders } from "../pages/Orders.jsx";
@@ -21,6 +22,7 @@ function Router() {
         />
         <Route path={routes.cart} element={<Cart />} />
         <Route path={routes.checkout} element={<Checkout />} />
+        <Route path={routes.checkoutSuccess} element={<CheckoutSuccess />} />
         <Route path={routes.login} element={<Login />} />
         <Route
           path={routes.orders}

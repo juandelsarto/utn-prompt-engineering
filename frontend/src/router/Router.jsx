@@ -4,6 +4,7 @@ import { Cart } from "../pages/Cart.jsx";
 import { Checkout } from "../pages/Checkout.jsx";
 import { Dashboard } from "../pages/Dashboard.jsx";
 import { Login } from "../pages/Login.jsx";
+import { Orders } from "../pages/Orders.jsx";
 import { Products } from "../pages/Products.jsx";
 import routes from "./routes.js";
 
@@ -21,6 +22,10 @@ function Router() {
         <Route path={routes.cart} element={<Cart />} />
         <Route path={routes.checkout} element={<Checkout />} />
         <Route path={routes.login} element={<Login />} />
+        <Route
+          path={routes.orders}
+          element={user ? <Orders /> : <Navigate to={routes.login} />}
+        />
       </Routes>
     </BrowserRouter>
   );

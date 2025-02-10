@@ -3,10 +3,8 @@ import {
   AlertIcon,
   Box,
   Button,
-  Link as ChakraLink,
   Container,
   Heading,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { useState } from "react";
@@ -24,16 +22,15 @@ const Login = () => {
     try {
       const loggedInUser = await loginWithGoogle(); // Iniciamos sesión con Google
       console.log(loggedInUser); // Puedes ver los detalles del usuario aquí
-      navigate(routes.home); // Redirigir al home si el login es exitoso
+      navigate(routes.orders); // Redirigir al home si el login es exitoso
     } catch (err) {
       console.log(err);
       setError("Error al iniciar sesión con Google. Intenta de nuevo.");
     }
   };
 
-  // Si ya está logueado, redirigir automáticamente
   if (user) {
-    navigate(routes.home); // Redirige al home si ya está autenticado
+    navigate(routes.orders);
   }
 
   return (
@@ -58,13 +55,6 @@ const Login = () => {
             >
               Iniciar sesión con Google
             </Button>
-
-            <Text>
-              ¿No tienes cuenta?{" "}
-              <ChakraLink color="blue.500" href="/registro">
-                Regístrate
-              </ChakraLink>
-            </Text>
           </VStack>
         </Box>
       </Container>

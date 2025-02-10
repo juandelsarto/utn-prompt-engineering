@@ -77,6 +77,11 @@ export const Navbar = () => {
                     Panel de control
                   </Button>
                 </Link>
+                <Link to={routes.orders}>
+                  <Button variant="link" colorScheme="whiteAlpha" mr={3}>
+                    Pedidos
+                  </Button>
+                </Link>
                 <Button colorScheme="whiteAlpha" onClick={handleLogout}>
                   Cerrar sesión
                 </Button>

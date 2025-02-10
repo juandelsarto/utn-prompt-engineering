@@ -20,10 +20,7 @@ export const createOrder = async (req, res) => {
 
     const savedOrder = await order.save();
 
-    res.status(201).json({
-      success: true,
-      data: savedOrder,
-    });
+    res.status(201).json(savedOrder);
   } catch (error) {
     console.error("Error creating order:", error);
     res.status(500).json({
@@ -40,10 +37,7 @@ export const getOrders = async (req, res) => {
       .populate("items.productId")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
-      success: true,
-      data: orders,
-    });
+    res.status(200).json(orders);
   } catch (error) {
     console.error("Error fetching orders:", error);
     res.status(500).json({
@@ -56,27 +50,21 @@ export const getOrders = async (req, res) => {
 // Get single order
 export const getOrder = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id).populate(
-      "items.productId"
-    );
+    const order = await Order.findById(req.params.id)
+      .populate("customer")
+      .populate({
+        path: "items.productId",
+        model: "Mattress",
+      });
 
     if (!order) {
-      return res.status(404).json({
-        success: false,
-        error: "Order not found",
-      });
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
+    res.json(order);
   } catch (error) {
     console.error("Error fetching order:", error);
-    res.status(500).json({
-      success: false,
-      error: "Error fetching order",
-    });
+    res.status(500).json({ message: "Error fetching order details" });
   }
 };
 
@@ -87,7 +75,6 @@ export const deleteOrder = async (req, res) => {
 
     if (!order) {
       return res.status(404).json({
-        success: false,
         error: "Order not found",
       });
     }
@@ -95,7 +82,6 @@ export const deleteOrder = async (req, res) => {
     await order.deleteOne();
 
     res.status(200).json({
-      success: true,
       message: "Order deleted successfully",
     });
   } catch (error) {
@@ -116,7 +102,6 @@ export const updateOrderStatus = async (req, res) => {
 
     if (!order) {
       return res.status(404).json({
-        success: false,
         error: "Order not found",
       });
     }
@@ -124,14 +109,10 @@ export const updateOrderStatus = async (req, res) => {
     order.status = status;
     await order.save();
 
-    res.status(200).json({
-      success: true,
-      data: order,
-    });
+    res.status(200).json(order);
   } catch (error) {
     console.error("Error updating order status:", error);
     res.status(500).json({
-      success: false,
       error: "Error updating order status",
     });
   }

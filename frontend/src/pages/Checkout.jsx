@@ -180,50 +180,54 @@ const Checkout = () => {
 
       setIsLoading(true);
 
-      try {
-        await createOrder({
-          customer: {
-            name: formData[FIELDS.NAME],
-            email: formData[FIELDS.EMAIL],
-            phone: formData[FIELDS.PHONE],
-            direction: formData[FIELDS.DIRECTION],
-          },
-          payment: {
-            cardNumber: formData[FIELDS.CARD_NUMBER],
-            expirationDate: formData[FIELDS.EXPIRATION_DATE],
-          },
-          items: cartItems,
-          total: cartTotal,
-        });
+      setTimeout(async () => {
+        try {
+          await createOrder({
+            customer: {
+              name: formData[FIELDS.NAME],
+              email: formData[FIELDS.EMAIL],
+              phone: formData[FIELDS.PHONE],
+              direction: formData[FIELDS.DIRECTION],
+            },
+            payment: {
+              cardNumber: formData[FIELDS.CARD_NUMBER],
+              expirationDate: formData[FIELDS.EXPIRATION_DATE],
+            },
+            items: cartItems,
+            total: cartTotal,
+          });
 
-        toast({
-          title: "Compra exitosa",
-          description: "¡Gracias por tu compra!",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
+          toast({
+            title: "Compra exitosa",
+            description: "¡Gracias por tu compra!",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
 
-        // Clear form
-        setFormData(initFormData);
-        localStorage.removeItem("cart");
-        navigate(routes.home);
-      } catch (error) {
-        console.error("Error submitting order:", error);
-        toast({
-          title: "Error",
-          description:
-            "Ocurrió un error al procesar tu compra. Por favor, inténtalo de nuevo.",
-          status: "error",
-          duration: 5000,
-          isClosable: true,
-        });
-      } finally {
-        setIsLoading(false);
-      }
+          // Clear form
+          setFormData(initFormData);
+          localStorage.removeItem("cart");
+          navigate(routes.checkoutSuccess);
+        } catch (error) {
+          console.error("Error submitting order:", error);
+          toast({
+            title: "Error",
+            description:
+              "Ocurrió un error al procesar tu compra. Por favor, inténtalo de nuevo.",
+            status: "error",
+            duration: 5000,
+            isClosable: true,
+          });
+        } finally {
+          setIsLoading(false);
+        }
+      }, 2000);
     },
     [formData, cartItems, cartTotal, toast, navigate]
   );
+
+  console.log(isLoading);
 
   return (
     <Layout>

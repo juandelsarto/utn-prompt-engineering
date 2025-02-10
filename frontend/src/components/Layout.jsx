@@ -21,7 +21,9 @@ const Layout = ({ children }) => {
       </Box>
       <Box as="footer" bg="gray.100" py={4}>
         <Container maxW="container.xl">
-          <Text textAlign="center">Sitio creado por Gabriel Alberini</Text>
+          <Text textAlign="center">
+            Sitio creado por Gabriel Alberini / Juan Cruz Del Sarto
+          </Text>
         </Container>
       </Box>
     </Box>

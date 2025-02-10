@@ -7,12 +7,22 @@ import { auth } from "../services/firebase"; // Asegúrate de que auth esté con
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Estado para almacenar el usuario autenticado
+  // Initialize user state from localStorage if available
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("authUser");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   // Usamos el hook useEffect para suscribirnos al cambio de estado de autenticación
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser); // Actualizamos el estado cuando el usuario cambia
+      // Save or remove user data from localStorage
+      if (currentUser) {
+        localStorage.setItem("authUser", JSON.stringify(currentUser));
+      } else {
+        localStorage.removeItem("authUser");
+      }
     });
     return () => unsubscribe(); // Limpiamos la suscripción al desmontar el componente
   }, []);
@@ -21,6 +31,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await signOut(auth); // Llamamos al método signOut de Firebase para cerrar la sesión
     setUser(null); // Limpiamos el estado global cuando el usuario cierra sesión
+    localStorage.removeItem("authUser"); // Clear localStorage on logout
   };
 
   return (

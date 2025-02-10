@@ -1,16 +1,92 @@
 [
   {
-    "id": 1,
-    "name": "Colchón Ortopédico",
-    "dimensions": "200x150x20",
-    "material": "Espuma",
-    "price": "20000123"
+    "_id": "67a945fcc22b913048e4c294",
+    "name": "Soft Dream",
+    "price": 450000,
+    "dimensions": "SIZE_160x200",
+    "material": "FOAM",
+    "materialType": "ALTA_DENSIDAD",
+    "image": "https://m.media-amazon.com/images/I/81YlIMbve9L.jpg"
   },
   {
-    "id": 2,
-    "name": "Colchón de Resortes Pepe",
-    "dimensions": "190x140x25",
-    "material": "Resortes y espuma",
-    "price": 35000
+    "_id": "67a956fcc22b913048e4c298",
+    "name": "Cloud Rest",
+    "price": 390000,
+    "dimensions": "SIZE_120x200",
+    "material": "FOAM",
+    "materialType": "VICOELASTICA",
+    "image": "https://m.media-amazon.com/images/I/810fYesHVsL.jpg"
+  },
+  {
+    "_id": "67a967fcc22b913048e4c299",
+    "name": "Dream Deluxe",
+    "price": 510000,
+    "dimensions": "SIZE_180x200",
+    "material": "SPRING",
+    "materialType": "BONNELL",
+    "image": "https://m.media-amazon.com/images/I/71pN+iU+LuL._AC_UF894,1000_QL80_.jpg"
+  },
+  {
+    "_id": "67a978fcc22b913048e4c300",
+    "name": "Comfort Plus",
+    "price": 420000,
+    "dimensions": "SIZE_100x200",
+    "material": "FOAM",
+    "materialType": "MEDIA_DENSIDAD",
+    "image": "https://m.media-amazon.com/images/I/81Ak33eeyUL._AC_UF1000,1000_QL80_.jpg"
+  },
+  {
+    "_id": "67a989fcc22b913048e4c310",
+    "name": "Royal Sleep",
+    "price": 480000,
+    "dimensions": "SIZE_140x200",
+    "material": "SPRING",
+    "materialType": "POCKET",
+    "image": "https://m.media-amazon.com/images/I/81SYayE1iGL.jpg"
+  },
+  {
+    "_id": "67a990fcc22b913048e4c320",
+    "name": "Relax Comfort",
+    "price": 370000,
+    "dimensions": "SIZE_90x190",
+    "material": "FOAM",
+    "materialType": "BAJA_DENSIDAD",
+    "image": "https://m.media-amazon.com/images/I/41tzp0913wL._AC_SY1000_.jpg"
+  },
+  {
+    "_id": "67a999fcc22b913048e4c330",
+    "name": "Spring Elegance",
+    "price": 530000,
+    "dimensions": "SIZE_200x200",
+    "material": "SPRING",
+    "materialType": "LFK",
+    "image": "https://m.media-amazon.com/images/I/71GMeqRwgIL._AC_UF1000,1000_QL80_.jpg"
+  },
+  {
+    "_id": "67a9a0fcc22b913048e4c340",
+    "name": "Deluxe Foam",
+    "price": 460000,
+    "dimensions": "SIZE_80x190",
+    "material": "FOAM",
+    "materialType": "ALTA_DENSIDAD",
+    "image": "https://m.media-amazon.com/images/I/81THwIYAAfL._AC_UF1000,1000_QL80_.jpg"
+  },
+  {
+    "_id": "67a9a9fcc22b913048e4c350",
+    "name": "Premium Spring",
+    "price": 550000,
+    "dimensions": "SIZE_160x200",
+    "material": "SPRING",
+    "materialType": "POCKET",
+    "image": "https://m.media-amazon.com/images/I/81XHA0MaS6L.jpg"
+  },
+  {
+    "_id": "67a9b0fcc22b913048e4c360",
+    "name": "Soft Cloud",
+    "price": 400000,
+    "dimensions": "SIZE_120x200",
+    "material": "FOAM",
+    "materialType": "VICOELASTICA",
+    "image": "https://m.media-amazon.com/images/I/71BDj48ETJL._AC_UF1000,1000_QL80_.jpg"
   }
 ]

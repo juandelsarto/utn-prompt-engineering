@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Layout } from "../components/Layout";
 import { ERRORS, FIELDS, VALIDATIONS } from "../constants/checkout";
 import routes from "../router/routes";
-import createOrder from "../services/order";
+import { createOrder } from "../services/order";
 import { getCartItems, getCartTotal } from "../utilities/cart";
 
 const initFormData = {
@@ -222,7 +222,7 @@ const Checkout = () => {
         setIsLoading(false);
       }
     },
-    [formData, cartItems, cartTotal, toast]
+    [formData, cartItems, cartTotal, toast, navigate]
   );
 
   return (

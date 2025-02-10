@@ -24,6 +24,7 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import defaultImage from "../assets/no-image-placeholder.svg";
@@ -115,14 +116,14 @@ export function Orders() {
 
   return (
     <Layout>
-      <Box py={8}>
+      <Box py={8} overflowX="auto">
         <Container maxW="container.xl">
           <Heading>Mis Pedidos</Heading>
           <Container maxW="container.xl" py={8}>
             <Table variant="simple">
               <Thead>
                 <Tr>
-                  <Th>ID Pedido</Th>
+                  <Th>Fecha</Th>
                   <Th>Cliente</Th>
                   <Th>Total</Th>
                   <Th>Estado</Th>
@@ -133,7 +134,9 @@ export function Orders() {
                 {orders.length > 0 ? (
                   orders.map((order) => (
                     <Tr key={order._id}>
-                      <Td>{order._id}</Td>
+                      <Td>
+                        {dayjs(order.createdAt).format("DD/MM/YYYY - HH:MM")}
+                      </Td>
                       <Td>{order.customer.name}</Td>
                       <Td>{formatPrice(order.total)}</Td>
                       <Td>
@@ -222,6 +225,10 @@ export function Orders() {
                       </VStack>
                     </HStack>
                   ))}
+                </Box>
+                <Box>
+                  <Text fontWeight="bold">Dirección de envío:</Text>
+                  <Text>{orderDetails.customer.direction}</Text>
                 </Box>
                 <Box>
                   <Text fontWeight="bold">Total:</Text>

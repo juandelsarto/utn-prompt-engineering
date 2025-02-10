@@ -7,8 +7,6 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
@@ -51,21 +49,14 @@ export const Navbar = () => {
             <Link to={routes.home}>
               <Image src={logo} boxSize={16} />
             </Link>
-            <Link to={routes.home}>
-              <Button variant="link" colorScheme="whiteAlpha">
-                Inicio
-              </Button>
-            </Link>
             {!user && (
-              <Link to={routes.cart}>
-                <Button
-                  leftIcon={<FontAwesomeIcon icon={faShoppingCart} />}
-                  variant="link"
-                  colorScheme="whiteAlpha"
-                >
-                  Mi Carrito ({cartCount})
-                </Button>
-              </Link>
+              <>
+                <Link to={routes.home}>
+                  <Button variant="link" colorScheme="whiteAlpha">
+                    Inicio
+                  </Button>
+                </Link>
+              </>
             )}
           </HStack>
           <HStack gap={6}>
@@ -83,13 +74,18 @@ export const Navbar = () => {
                   </Button>
                 </Link>
                 <Button colorScheme="whiteAlpha" onClick={handleLogout}>
-                  Cerrar sesión
+                  Logout
                 </Button>
               </>
             ) : (
               <>
+                <Link to={routes.cart}>
+                  <Button variant="link" colorScheme="whiteAlpha">
+                    Mi Carrito ({cartCount})
+                  </Button>
+                </Link>
                 <Link to={routes.login}>
-                  <Button colorScheme="whiteAlpha">Iniciar sesión</Button>
+                  <Button colorScheme="whiteAlpha">Login as Admin</Button>
                 </Link>
               </>
             )}
